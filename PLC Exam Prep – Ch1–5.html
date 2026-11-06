@@ -1,0 +1,206 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PLC Exam Prep – Ch1–5</title>
+<style>
+:root{--bg:#f6f7f9;--fg:#1d2330;--card:#fff;--mu:#6b7385;--ac:#2557d6;--ok:#16874a;--bad:#c93232;--bd:#dde1e8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#12151c;--fg:#e8ebf2;--card:#1b2030;--mu:#97a0b5;--ac:#6c9bff;--ok:#4cc98a;--bad:#ff7b7b;--bd:#2c3347;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,Segoe UI,Arial,sans-serif}
+.w{max-width:820px;margin:0 auto;padding:16px}h1{font-size:22px;margin:4px 0 12px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+button,.chip{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--fg);padding:8px 14px;border-radius:10px;cursor:pointer}
+button.on,.chip.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+.q{font-weight:600;margin-bottom:10px}.m{color:var(--mu);font-size:13px;margin-bottom:6px}
+.opt{display:block;width:100%;text-align:left;margin:6px 0}
+.opt.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.opt.no{background:var(--bad);color:#fff;border-color:var(--bad)}
+.ans{border-left:4px solid var(--ok);padding:6px 12px;margin-top:10px;background:rgba(22,135,74,.08);border-radius:6px}
+.ans.w{border-color:var(--ac);background:rgba(37,87,214,.07)}
+.pg{height:6px;background:var(--bd);border-radius:4px;margin:8px 0 14px}.pg i{display:block;height:100%;background:var(--ac);border-radius:4px}
+input{font:inherit;padding:8px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--fg);width:100%;margin-bottom:10px}
+.bad{color:var(--bad)}.okc{color:var(--ok)}pre{white-space:pre-wrap;margin:6px 0}
+</style></head><body><div class="w">
+<h1>PLC Exam Prep · Chapters 1–5</h1><div class="bar" id="modes"></div><div class="bar" id="chs"></div><div id="app"></div></div>
+<script>
+const CH=["","1 · Hardware intro","2 · Switches & sensors","3 · PLC programming","4 · Ladder programming","5 · Function blocks"];
+const Q=[];
+const T=(c,q,a,w)=>Q.push({c,q,o:["True","False"],a:a?0:1,w});
+const M=(c,q,o,a,w)=>Q.push({c,q,o,a,w});
+const W=(c,q,w)=>Q.push({c,q,W:1,w});
+/* ===== CH1 ===== */
+T(1,"One of the advantages of a PID controller with higher Kp (above a value) is that the system will be faster.",0,"That is the advantage of the P controller. Past a certain Kp the system becomes oscillatory/unstable.");
+T(1,"One of the advantages of Ki/S is that it needs zero initial condition for every integration cycle.",0,"That is a DISadvantage (it also saturates and raises the order).");
+T(1,"In a PID controller, if Kp increases beyond a particular value the system becomes oscillatory or unstable.",1,"True – disadvantage of the P controller.");
+M(1,"This controller is proportional to the rate of change of error, so it damps oscillation in the transient response but has no effect at steady state.",["KdS","Kp","PID","Ki/S"],0,"Differential (D) controller: adds a zero at origin, reduces the order.");
+M(1,"One of the advantages of ____ is better steady-state response and neglected offset value.",["Kp","Ki","Kd","all of them"],1,"Integral action removes the steady-state offset.");
+T(1,"ROM gives permanent storage for the operating system and fixed data used by the CPU.",1,"ROM = permanent storage.");
+T(1,"EPROM is used to give permanent storage for the operating system and fixed data used by the CPU.",0,"That is ROM. EPROM is erasable and programmable.");
+M(1,"The type of memory that is fast and temporarily stores the data immediately required for use is called:",["HDD","ROM","RAM","SSD"],2,"RAM = temporary, fast, volatile.");
+T(1,"If the controlled plant changes, a microcontroller chip must be reprogrammed to satisfy the new task.",1,"True – a microcontroller property.");
+T(1,"One advantage of the microcontroller is that it is rugged and designed to withstand vibration, temperature, humidity and noise.",0,"That describes the PLC.");
+T(1,"One advantage of the microcontroller is that it has interfacing for inputs and outputs already inside.",0,"That is a PLC feature.");
+T(1,"DCS is a computer implemented on a single chip with the same software and hardware as a computer.",0,"That is the microcontroller.");
+T(1,"CNC is a computer implemented on a single chip.",0,"That is the microcontroller. CNC = computer that guides a process that might otherwise be done manually.");
+M(1,"A ____ uses a computer to guide a process that might otherwise be done manually.",["PLC","Microcontroller","CNC","DCS"],2,"CNC (computer numerical control).");
+M(1,"The basic components of ____ systems: program, controller unit and machine tool.",["DCS","SCADA","CNC","PLC"],2,"CNC.");
+T(1,"Simple NC machines can use a tape reader to direct the machine.",1,"True.");
+M(1,"In ____ the system is divided into subsystems, each controlled by a control device.",["DCS","SCADA","PLC","microcontroller"],0,"DCS = distributed control system.");
+T(1,"DCS relies on a variety of communication links such as radio and telephone.",0,"That is SCADA; DCS uses a LAN.");
+T(1,"DCS covers a larger geographical area and relies on telephone lines.",0,"That is SCADA.");
+M(1,"SCADA systems are similar in operation to:",["PLC","CNC","DCS","microcontroller"],2,"DCS.");
+T(1,"SCADA systems are widely used for control in buildings.",1,"Also power generation, water and sewage.");
+M(1,"SCADA transfers data between a central computer and a number of ____ and/or PLCs.",["RTUs (Remote Terminal Units)","DCS","Data representation","CNC"],0,"RTUs.");
+M(1,"SCADA: small computerised units deployed in the field at specific sites are the:",["Sensors","RTUs","Master units","Communications units"],1,"RTUs. Master units = larger consoles acting as central processor.");
+M(1,"SCADA component that connects the SCADA master unit to the RTUs in the field:",["Sensors","RTUs","Master units","Communications network"],3,"Communications network/unit.");
+M(1,"The important objective of SCADA is:",["Monitoring","Control","Automation","all of them"],3,"All of them.");
+T(1,"Automation is online real-time control for closed-loop and open-loop processes.",1,"True.");
+T(1,"In a PLC each company has its own type, but all are similar in programming according to IEC 1131-3.",1,"IEC 1131-3 is the programming-language standard.");
+T(1,"The CPU is a computer where ladder logic is stored and processed.",1,"True.");
+M(1,"____ interprets the input signals and carries out the control action.",["CPU","input & output devices","buses","programming devices"],0,"The CPU.");
+M(1,"____ is responsible for data manipulation and arithmetic (add, subtract) and logic (AND, OR, NOT).",["Control unit","Registers","ALU","Bus"],2,"ALU – not the CPU, not the control unit.");
+T(1,"The ALU is used to control the timing of operations.",0,"That is the control unit.");
+T(1,"The part that monitors the inputs and makes decisions in a PLC is the Monitor.",0,"It is the CPU.");
+M(1,"The ____ bus carries the signals used by the CPU for control (e.g. read/write).",["system","address","data","control"],3,"Control bus.");
+T(1,"The CPU uses the control bus for sending data between the constituent elements.",0,"It uses the DATA bus.");
+M(1,"The CPU uses the ____ for sending data between the constituent elements.",["Address bus","Control bus","Data bus","System bus"],2,"Data bus.");
+T(1,"The system bus is used for communication between input/output ports and the input/output unit.",1,"True.");
+T(1,"The address bus is used for communication between I/O ports and the I/O unit.",0,"That is the system bus. The address bus carries memory addresses.");
+M(1,"____ is used to receive and transmit data on networks from or to other remote PLCs.",["Input/output interface","Communications interface","Programming device","none"],1,"Communications interface.");
+M(1,"The ____ is used to enter the required program into the memory of the processor.",["Communication interface","I/O terminal","Bus","Programming device"],3,"Programming device.");
+T(1,"The input and output terminal is used to indicate the status of the PLC (power on, programming, running).",0,"That is the indicator lights.");
+T(1,"For larger PLCs the inputs are purchased as modules/cards with 8 or 16 inputs of the same type per card.",1,"True.");
+T(1,"To increase the number of PLC inputs and outputs you can use expansion modules (or another PLC unit).",1,"True.");
+T(1,"The input/output channels provide isolation and signal-conditioning functions.",1,"True – registers do not.");
+T(1,"Electrical isolation from the external world is usually done by an optocoupler.",1,"True.");
+T(1,"Sinking is used to transfer the action in measurable form from plant to PLC.",0,"That is sourcing.");
+T(1,"Analog sensor is used only to detect a preset value or object and give a related signal.",0,"That is a digital sensor. Analog gives a wide range of outputs.");
+T(1,"The sensors and switches are the elements that make the PLC take decisions according to the inputs.",1,"True.");
+M(1,"The ____ take the output of the PLC (control signal) and begin to affect the system.",["Actuators","Switches","Sensors","none"],0,"Actuators.");
+T(1,"Inputs to PLCs are often relays, but can also be transistors for DC or triacs for AC.",0,"That describes OUTPUTS.");
+T(1,"A solenoid is an example of an output device.",1,"True. AC/DC motors are outputs too.");
+M(1,"One of the following is an input device:",["Motor","Light","Valve","Sensor"],3,"Sensor.");
+M(1,"The term ____ is used for an input device giving a usable output in response to a specified physical input.",["Sensor","transistor","capacitor","resistance"],0,"Sensor.");
+M(1,"The ____ motor rotates through equal angles (steps) for each digital pulse.",["BLDC","induction","stepper","repulsion"],2,"Stepper motor.");
+T(1,"There are cylinders that work with compressed oil called hydraulic.",1,"True. Pneumatic = compressed air.");
+T(1,"There are cylinders that work with compressed oil called pneumatic.",0,"Compressed AIR = pneumatic; oil = hydraulic.");
+M(1,"Cylinder: power on its terminal makes it advance; power off makes it return into its cone.",["Single acting","Double acting","Both","none"],0,"Single-acting (spring return).");
+M(1,"Cylinder: power on the advance terminal advances and stays; power on retract terminal retracts.",["Single acting","Double acting","Both","none"],1,"Double-acting.");
+T(1,"In a 6-terminal relay, with no coil voltage OUT = IN2; with voltage OUT = IN1.",0,"That is the 5-terminal relay. In the 6-terminal relay, no voltage = no output.");
+M(1,"Which statement about a single-pole double-throw relay is NOT true?",["It is called SPDT","It has one common contact","It has two positions (NC and NO)","It has a center-off position"],3,"SPDT has no center-off.");
+M(1,"When a relay is NOT energized:",["Path through NO contacts","Path through NC contacts","Neither has a path","Both have a path"],1,"Path through the NC contacts.");
+T(1,"Relays are usually SPDT or DPDT but can have many more sets of switch contacts.",1,"True.");
+T(1,"Contactors are special relays for switching low amounts of current.",0,"Contactors switch LARGE currents.");
+M(1,"A device used to energize and de-energize an electrical circuit:",["Power supply","sinking","sourcing","contactors"],3,"Contactors.");
+M(1,"____ can generate a very high voltage across the coil when switched off, damaging other components.",["Contactor","relay","Switch","none"],1,"Relay (inductive kick; use a diode).");
+M(1,"____ are the most flexible output devices: switch AC and DC, but slower (~10 ms).",["Contactor","relay","Switch","none"],1,"Relays.");
+T(1,"Relays require more current than many chips can provide, so a low-power transistor may switch the relay coil.",1,"True.");
+T(1,"Relays can only switch DC; transistors can switch AC and DC.",0,"Reversed: relays switch AC and DC; transistors DC only.");
+M(1,"The PLC is used in:",["Machine tools","Automated assembly equipment","Moulding & extrusion machines","All of the above"],3,"All of the above.");
+/* ===== CH2 ===== */
+T(2,"Pressure sensor is a sensing switch that uses an electromagnetic coil to detect metal without contact.",0,"That is the inductive sensor.");
+T(2,"Capacitive sensor produces an electrostatic field to detect metal and non-metallic objects without contact.",1,"True.");
+T(2,"Ultrasonic sensor produces an electrostatic field to detect metal and non-metallic objects.",0,"That is capacitive. Ultrasonic uses high-frequency sound.");
+T(2,"Capacitive sensor uses an electromagnetic coil to detect a metal object.",0,"That is inductive.");
+M(2,"Sensing switch using an electromagnetic coil to detect a metal object without contact:",["Photoelectric","Capacitive","Ultrasonic","Inductive"],3,"Inductive proximity.");
+M(2,"Sensing switch using high-frequency sound to detect an object without contact:",["Proximity","Inductive","Capacitive","Ultrasonic"],3,"Ultrasonic.");
+M(2,"Sensor that detects presence/absence of an object without physical contact:",["Proximity","Inductive","Capacitive","Ultrasonic"],0,"Proximity (general term).");
+M(2,"Applications: packaging, material handling and parts detection.",["Photoelectric","Capacitive","Ultrasonic","Inductive"],0,"Photoelectric.");
+M(2,"Advantages: high current capability, low cost, familiar “low-tech” sensing.",["Photoelectric","Inductive","Capacitive","Limit switch"],3,"Limit switch.");
+M(2,"Advantages: resistant to harsh environments, very predictable, long life.",["Photoelectric","Inductive","Capacitive","Limit switch"],1,"Inductive.");
+M(2,"Control device that opens/closes contacts in response to a change in pressure of a liquid or gas:",["Pressure switch","Sensing switch","Limit switch","none"],0,"Pressure switch.");
+M(2,"In ____ the electrical resistance of metals changes with temperature.",["LDR","RTD","LED","MOSFET"],1,"RTD.");
+M(2,"The ____ consists of two strips of different metals with different expansion coefficients.",["thermocouple","thermistor","bimetal element","strain gauge"],2,"Bimetal element.");
+M(2,"Sensor limitation: the maximum difference between indicated and actual reading.",["Accuracy","Resolution","Repeatability","Precision"],0,"Accuracy.");
+M(2,"The smallest increment a sensor can detect (may be included in the accuracy value):",["Resolution","Precision","Linearity","Accuracy"],0,"Resolution.");
+T(2,"Key switch contains a conductive liquid that bridges contacts when tilted.",0,"That is the tilt switch.");
+M(2,"____ switches contain a conductive liquid; when tilted it bridges the contacts.",["Micro","Key","Tilt","Reed"],2,"Tilt switches.");
+T(2,"Key switch is used to set up circuits, e.g. the code of a remote control.",0,"That is the DIP switch.");
+M(2,"Switch used to set up circuits, e.g. the code of a remote control:",["DIP switch","Multi-pole","Reed switch","Key switch"],0,"DIP switch.");
+T(2,"Micro switches switch fully open or closed in response to small movements; available with levers and rollers.",1,"True.");
+T(2,"A reed switch is a type of DPST.",0,"It is SPST.");
+M(2,"Reed switch is a type of:",["SPST","SPDT","DPST","DPDT"],0,"SPST.");
+M(2,"Switch that can be on in both positions, switching a separate device in each case:",["SPST toggle","SPDT toggle","Push-to-break","Push-to-make"],1,"SPDT toggle.");
+M(2,"SPDT variant with a third centre position that is off:",["SPDT toggle","SPDT slide","SPDT rocker","all of them"],2,"SPDT rocker.");
+M(2,"A ____ toggle switch can be used as simple on-off by connecting COM and one of A/B.",["SPDT","SPST","DPDT","DPST"],0,"SPDT.");
+M(2,"A ____ switch can be wired as a reversing switch for a motor.",["SPDT","SPST","DPDT","DPST"],2,"DPDT.");
+M(2,"A ____ switch is often used to switch mains because it isolates both live and neutral.",["SPDT","SPST","DPDT","DPST"],3,"DPST.");
+T(2,"With mains electricity a DPST toggle switch must be in the live wire, but it is better to use SPST to isolate both live and neutral.",0,"Swapped: SPST goes in the live wire; DPST isolates both.");
+M(2,"Important features when selecting a switch:",["Contacts","Rating","Method of operation","All of them"],3,"All of them.");
+T(2,"The switch contact returns to its normal position when released if it is momentary.",1,"True.");
+T(2,"The maximum current is less for inductive loads (coils, motors) because they cause more sparking when switched off.",1,"True.");
+T(2,"Switch contacts are rated with a maximum voltage and current.",1,"True.");
+M(2,"____ mechanical mechanisms open or close electrical contacts for a logical signal.",["Sensor","Switches","Cylinders","Relays"],1,"Switches.");
+/* ===== CH3 ===== */
+M(3,"The ____ language enables graphic representation of Boolean expressions because it deals with Boolean variables.",["QLD (Quick Ladder)","SFC","FBD","ST"],0,"Quick Ladder Diagram (as per the exam key).");
+T(3,"SFC is the whole software we used to program the PLC.",0,"The software is ISaGRAF; SFC is one language.");
+T(3,"Ladder is the whole software used to program the PLC.",0,"ISaGRAF is the software; ladder is a language.");
+T(3,"In ladder language each rung must begin with a coil.",0,"A rung starts with contacts (inputs) and ends with the output.");
+T(3,"Control part contains the output of the program, which comes out of the PLC, and flags.",0,"That is the POWER part.");
+T(3,"We put Restart as a normally closed contact in series with all rungs in the control part.",1,"True.");
+T(3,"We put Pause as a normally closed contact in series with all rungs in the control part.",0,"Pause goes in the POWER part.");
+M(3,"We add a pause switch as a ____ contact in series with all rungs in the power part.",["normally closed","normally open","negated","pulse"],0,"Normally closed.");
+T(3,"Microcontroller, like a computer, receives input and produces output due to a stored program, but it is more complicated.",0,"That describes the PLC.");
+/* ===== CH4 ===== */
+M(4,"An AND function in ladder logic uses:",["NC contacts in series","NO contacts in series","NC contacts in parallel","NO contacts in parallel"],1,"AND = NO contacts in series.");
+T(4,"An OR function in ladder logic uses normally closed contacts in series.",0,"OR = NO contacts in parallel.");
+M(4,"Which contact conducts when its input is open-circuit (no input) and breaks when input is on?",["Normally closed contact","Normally open contact","+ve edge contact","-ve edge contact"],0,"Normally closed.");
+M(4,"It represents the action and the terminal where the output will take place:",["Coil","Contact","Power part","Control part"],0,"Coil.");
+M(4,"The term “Set” in a PLC ladder diagram means:",["latch","unlatch","1","0"],0,"Set = latch.");
+M(4,"Used to store the value of sensors during the program until it finishes:",["Flags","Latch","Contact","Coil"],1,"Latch.");
+T(4,"Flags are used to store the value of sensors during the program until it finishes.",0,"That is the latch. Flags connect rungs.");
+M(4,"Used to connect the lines to each other and transfer the action from one rung to another so the program executes sequentially:",["Latch","Flags","Contacts","Coil"],1,"Flags.");
+M(4,"A ladder rung shows an input contact feeding an output coil. (i) Input contacts are normally open. (ii) There is an output when there is an input.",["(i) T (ii) T","(i) T (ii) F","(i) F (ii) T","(i) F (ii) F"],0,"Both true.");
+/* ===== CH5 ===== */
+T(5,"The function block that starts an action after a certain time is the ON-delay timer (TON).",1,"True; Off-delay is wrong.");
+M(5,"____ is used to expand the output for a period of time although the input is off.",["TOF","TON","TP","TON & TOF"],0,"TOF (off-delay).");
+M(5,"It is used to produce a single pulse of a particular period of time.",["Pulse timer (TP)","On-delay timer","Off-delay timer","On-off timer"],0,"TP.");
+T(5,"The CTU block does not detect rising/falling edges of the counting input; it must be associated with a pulse generator.",0,"It needs an R_TRIG (edge detector).");
+M(5,"The CTD block does not detect edges of the counting input; it needs:",["Counter","pulse generator","R_trig","TP"],2,"R_TRIG.");
+T(5,"The function block that detects a rising edge of a Boolean variable is F_TRIG (or pulse trig).",0,"Rising edge = R_TRIG; falling edge = F_TRIG.");
+M(5,"Compare two values: tell if equal, or if the first is less/greater than the second.",["Timer","CMP","blink","none"],1,"CMP block.");
+/* ===== WRITTEN ===== */
+W(1,"List the types of controllers.","<b>P</b> (Kp) – faster; <b>I</b> (Ki/S) – small offset, adds pole at origin; <b>D</b> (KdS) – damps transient, adds zero at origin; <b>PI</b> – used in ~90% of practical controllers; <b>PID</b> – complicated systems: faster (P), better steady state (I), better transient (D).");
+W(1,"Define the PLC and list its components.","PLC (programmable logic controller) is like a computer: receives inputs and produces outputs due to a stored program; rugged (vibration, temperature, humidity, noise), has I/O interfacing built-in, easy to program (IEC 1131-3).<br><b>Components:</b> 1 CPU (microprocessor, interprets inputs and executes the control action) · 2 Memory · 3 Power supply (AC → low DC) · 4 Communication interface · 5 Programming device · 6 Input/output · 7 Indicator lights.");
+W(1,"Define the microcontroller and why it is used.","A computer implemented on a single chip with the same hardware/software needs as a computer. Used because: inexpensive, stores and runs unique programs, math/logic functions, fast, field-programmable/flexible, easy to use.");
+W(1,"What are the types of buses in a PLC?","<b>Data bus</b> – carries data processed by the CPU (8-bit micro = 8-bit numbers). <b>Address bus</b> – carries memory-location addresses. <b>Control bus</b> – carries CPU control signals (e.g. read/write). <b>System bus</b> – communication between I/O ports and the I/O unit.");
+W(1,"What are the types of memory in a PLC?","ROM (permanent storage of the operating system) · RAM for the user’s program · RAM for data · EPROM (erasable, programmable).");
+W(1,"Types of sensors and actuators used with a PLC.","<b>Sensors:</b> digital/analog; proximity (inductive, capacitive, ultrasonic), photoelectric, pressure. <b>Actuators:</b> AC/DC, servo and stepper motors; valves (solenoid, proportional); relays and contactors; pneumatic/hydraulic cylinders; indicator lights.");
+W(1,"Types of cylinders and how they work.","<b>Single-acting:</b> power applied → rod advances; power off → returns into its cone. <b>Double-acting:</b> power on advance terminal → advances (stays if power off); power on retract terminal → retracts.");
+W(1,"Types of relays and how they work.","<b>5-terminal:</b> no coil voltage OUT = IN2; with voltage OUT = IN1. <b>6-terminal:</b> with coil voltage OUT1 = IN1 and OUT2 = IN2; coil off → no output.");
+W(1,"What does PID mean? Draw the block diagram. Why is PID better than PI?","PID = Proportional-Integral-Derivative.<pre>setpoint ─►(Σ)─ error ─┬─► [P] ─┐\n          ▲(−)         ├─► [I] ─┼─►(Σ)─► [Process] ─┬─► output\n          │            └─► [D] ─┘                   │\n          └─────────────── feedback ───────────────┘</pre>PID adds the D term, which damps oscillation and improves the transient response, while P gives speed and I removes steady-state offset.");
+W(2,"List the types of switches.","<b>Standard:</b> SPST (on/off), push-to-make, push-to-break, SPDT (on/on, on/off), dual (on/off, on/on). <b>Special:</b> push-push, micro, key, tilt, reed, DIP, multi-pole, multi-way.");
+W(2,"Types of sensors: describe proximity, inductive, capacitive, ultrasonic, photoelectric, pressure.","Proximity – detects an object without contact. Inductive – electromagnetic coil, metal only. Capacitive – electrostatic field, metal and non-metal. Ultrasonic – high-frequency sound. Photoelectric – recognition, detection, classification. Pressure switch – opens/closes contacts on pressure change of liquid/gas.");
+W(4,"Draw the ladder for the function table: (I1,I2) → (Q1,Q2): 00→10, 01→01, 10→01, 11→10.","Q1 = I1·I2 + /I1·/I2 (XNOR); Q2 = /I1·I2 + I1·/I2 (XOR).<pre>Rung 1:  ┤I1├──┤I2├──┬────────( Q1 )\n         ┤/I1├─┤/I2├─┘\nRung 2:  ┤/I1├─┤I2├──┬────────( Q2 )\n         ┤I1├──┤/I2├─┘</pre>Series = AND, parallel branch = OR, ┤/├ = normally closed.");
+/* ===== APP ===== */
+const $=id=>document.getElementById(id);
+let mode="study",chs=new Set([1,2,3,4,5]),S=null,wrong=new Set(),stats={};
+try{wrong=new Set(JSON.parse(localStorage.getItem("plcw")||"[]"))}catch(e){}
+const save=()=>{try{localStorage.setItem("plcw",JSON.stringify([...wrong]))}catch(e){}};
+Q.forEach((q,i)=>q.i=i);
+function head(){
+ $("modes").innerHTML=["study","test","review"].map(m=>`<button class="${mode==m?"on":""}" onclick="mode='${m}';S=null;head();go()">${{study:"📖 Study",test:"✏️ Test",review:"🔁 Review wrong ("+wrong.size+")"}[m]}</button>`).join("");
+ $("chs").innerHTML=[1,2,3,4,5].map(c=>`<span class="chip ${chs.has(c)?"on":""}" onclick="tg(${c})">${CH[c]} (${Q.filter(q=>q.c==c).length})</span>`).join("");
+}
+function tg(c){chs.has(c)?chs.delete(c):chs.add(c);if(!chs.size)chs.add(c);S=null;head();go()}
+const pool=()=>Q.filter(q=>chs.has(q.c));
+function go(){mode=="study"?study():mode=="test"?testStart():reviewStart()}
+function ansTxt(q){return q.W?q.w:`<b>✔ ${q.o[q.a]}</b> – ${q.w}`}
+let filt="";
+function study(){
+ const L=pool().filter(q=>!filt||(q.q+q.w+(q.o||[]).join(" ")).toLowerCase().includes(filt));
+ let h=`<input placeholder="Search ${L.length} questions…" value="${filt}" oninput="filt=this.value.toLowerCase();study()" autofocus>`;
+ L.forEach((q,n)=>{h+=`<div class="card"><div class="m">${CH[q.c]}${q.W?" · written":""}</div><div class="q">${n+1}. ${q.q}</div>${q.o&&!q.W&&q.o.length>2?q.o.map((o,k)=>`<div class="${k==q.a?"okc":""}">${"abcd"[k]}) ${o}${k==q.a?" ✔":""}</div>`).join(""):""}<div class="ans ${q.W?"w":""}">${ansTxt(q)}</div></div>`});
+ $("app").innerHTML=h;const i=document.querySelector("input");if(i){i.focus();i.setSelectionRange(99,99)}
+}
+function testStart(){S=null;const n=pool().length;$("app").innerHTML=`<div class="card"><div class="q">Test mode</div><p>${n} questions from the selected chapters. You get the answer and explanation after each question; questions you miss are saved for review.</p><button class="on" onclick="begin(pool())">Start test</button></div>`}
+function reviewStart(){const L=Q.filter(q=>wrong.has(q.i)&&chs.has(q.c));$("app").innerHTML=L.length?`<div class="card"><div class="q">${L.length} questions you got wrong</div><button class="on" onclick="begin(Q.filter(q=>wrong.has(q.i)&&chs.has(q.c)))">Review them</button> <button onclick="wrong.clear();save();head();reviewStart()">Clear list</button></div>`:`<div class="card">Nothing to review yet – take a test first.</div>`}
+function begin(L){S={L:[...L].sort(()=>Math.random()-.5),n:0,ok:0,miss:[],done:0};show()}
+function show(){
+ if(S.n>=S.L.length)return fin();const q=S.L[S.n];
+ $("app").innerHTML=`<div class="pg"><i style="width:${S.n/S.L.length*100}%"></i></div><div class="card"><div class="m">Question ${S.n+1}/${S.L.length} · ${CH[q.c]} · score ${S.ok}</div><div class="q">${q.q}</div><div id="o">${q.W?`<button class="on" onclick="reveal()">Show answer</button>`:q.o.map((o,k)=>`<button class="opt" onclick="pick(${k})">${"abcd"[k]}) ${o}</button>`).join("")}</div><div id="f"></div></div>`}
+function fb(good){const q=S.L[S.n];$("f").innerHTML=`<div class="ans ${q.W?"w":""}">${good===true?"✅ Correct<br>":good===false?"❌ Wrong<br>":""}${ansTxt(q)}</div><p><button class="on" onclick="S.n++;show()">Next →</button></p>`}
+function pick(k){const q=S.L[S.n],g=k==q.a;document.querySelectorAll(".opt").forEach((b,j)=>{b.disabled=true;if(j==q.a)b.classList.add("ok");else if(j==k)b.classList.add("no")});mark(q,g);fb(g)}
+function reveal(){const q=S.L[S.n];$("o").innerHTML=`<button onclick="self(1)">I knew it</button> <button onclick="self(0)">I missed it</button>`}
+function self(g){mark(S.L[S.n],!!g);$("o").innerHTML="";fb(null)}
+function mark(q,g){if(g){S.ok++;if(mode=="review")wrong.delete(q.i)}else{S.miss.push(q);wrong.add(q.i)}save();head()}
+function fin(){const p=Math.round(S.ok/S.L.length*100);
+ $("app").innerHTML=`<div class="card"><div class="q">Result: ${S.ok}/${S.L.length} (${p}%)</div>${S.miss.length?`<p class="bad"><b>Highlighted – questions you got wrong (${S.miss.length}):</b></p>`+S.miss.map(q=>`<div class="card" style="border-color:var(--bad)"><div class="m">${CH[q.c]}</div><div class="q bad">${q.q}</div><div class="ans">${ansTxt(q)}</div></div>`).join("")+`<button class="on" onclick="begin(S.miss)">Retry the wrong ones</button> `:`<p class="okc">Perfect score!</p>`}<button onclick="mode='test';testStart();head()">Back</button></div>`}
+head();go();
+</script></body></html>
